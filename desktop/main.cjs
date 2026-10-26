@@ -9,7 +9,7 @@ electron.app.on('before-quit',event=>{
  // Destroying the final window can synchronously request another app.quit().
  shutdownPromise=shellPromise.then(shell=>shell.stop()).then(()=>{
   shutdownComplete=true;electron.app.quit();
- }).catch(()=>{console.error('DESKTOP_SERVICE_STOP_UNCONFIRMED');});
+ }).catch(error=>{console.error(['LOCAL_SERVICE_STOP_FORCED','LOCAL_SERVICE_STOP_NONZERO','LOCAL_SERVICE_STOP_FAILED','LOCAL_SERVICE_STOP_UNCONFIRMED'].includes(error.code)?error.code:'DESKTOP_SERVICE_STOP_UNCONFIRMED');});
 });
 electron.app.on('window-all-closed',()=>electron.app.quit());
 shellPromise.catch(error=>{

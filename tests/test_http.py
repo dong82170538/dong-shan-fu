@@ -1,3 +1,4 @@
+from tests.support import temporary_directory
 import http.client
 from contextlib import redirect_stderr
 import io
@@ -15,7 +16,7 @@ from tests.offline_guard import sitecustomize
 
 class HttpTests(unittest.TestCase):
     def setUp(self):
-        self.tmp = tempfile.TemporaryDirectory()
+        self.tmp = temporary_directory()
         self.store = Store(self.tmp.name + '/core.sqlite3')
         self.engine = Engine(self.store).start()
         self.server = make_server(self.store, self.engine, 0)
@@ -185,7 +186,7 @@ class HttpTests(unittest.TestCase):
 
 class ScheduleTests(unittest.TestCase):
     def test_manual_keys_cannot_collide_with_internal_schedule_keys(self):
-        with tempfile.TemporaryDirectory() as folder:
+        with temporary_directory() as folder:
             clock=ManualClock();clock.now=1792889400
             store=Store(folder+'/core.sqlite3',clock=clock)
             f=store.import_fixture(fixture())
@@ -199,7 +200,7 @@ class ScheduleTests(unittest.TestCase):
             self.assertIsNotNone(store.claim())
 
     def test_missed_one_shot_skips_once_and_due_submission_is_atomic(self):
-        with tempfile.TemporaryDirectory() as folder:
+        with temporary_directory() as folder:
             clock = ManualClock(); clock.now = 1792889400
             store = Store(folder + '/core.sqlite3', clock=clock)
             f = store.import_fixture(fixture())

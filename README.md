@@ -19,11 +19,11 @@ python3 -m commerce_core serve --port 8765 --concurrency 2
 python3 scripts/verify_stage3.py
 ```
 
-保留历史入口名，默认输出artifacts/stage4。完整网页验证需环境已有Playwright1.62.0与Chromium；本命令不下载依赖。已有浏览器可用COMMERCE_CHROMIUM指定。Linux进程监督器负责测试命令超时/失败/退出后的自有后代清理。当前Windows等效Job机制尚未集成，Windows测试入口在启动被测命令前BLOCKED；不能用Linux通过记录替代Windows验收。
+The historical verifier name is retained. On Windows, python scripts/verify_stage3.py creates a fresh artifacts/windows/<UTC-id> directory, owns each stage through an explicit acceptance Job guard, and binds results to unchanged runtime/test source bytes. Linux retains its original subreaper/pidfd backend. Existing Python 3.12+, Node 24.19+, Playwright 1.62.0 and Chromium are prerequisites; this command does not install them. Set COMMERCE_CHROMIUM to the existing browser path. See docs/WINDOWS_INTEGRATION.md.
 
-stage4基线在云端实际通过73项Python（包含8项进程清理回归）、28项Node协议/生命周期测试和两条Chromium网页流程。20个TS中19 PASS、TS16原生IPC BLOCKED。此精简候选树的验证结果另行记录，不把不同源码清单视为同一指纹。
+After independent review fixes, the recorded Windows integration run completed 76 Python PASS / 8 Linux-only skips (84 discovered), 32 Node PASS, 40 deterministic boundary PASS, and two real Chrome Web UI flows PASS. Forced/nonzero stop outcomes now reject and stay failed; cp936-parent CRLF decoding is explicitly tested. The 20 TS scenarios remain 19 PASS / 1 BLOCKED (TS16 native Electron IPC). Historical Linux evidence remains separate; Linux kernel regression was not executed on Windows.
 
-Electron精确锁定44.9.3，项目内未安装运行时；桌面启动器默认BLOCKED，不自动下载，也不使用其他应用的Electron。Windows R2进程组件尚未接收、未集成。原生Electron、Windows整套、MV3真实宿主及真实商家集成未验收。
+Electron is locked to 44.9.3. Its project runtime is absent and was not installed or executed. Native Electron IPC, packaged Windows application, real MV3 host and merchant integration remain unverified. The integrated Windows Job/core/lifecycle/Web subset passed locally and passed limited independent review; this is not whole-product or stage4 acceptance.
 
 详见docs/ARCHITECTURE.md、docs/DECISIONS.md、docs/DESKTOP.md与docs/VALIDATION.md。docs/analysis/erp-route-inventory.json仅为自写的惰性路由事实库存，不是原模块实现；它被现有只读能力端点和测试使用。表达式文本不会执行。
 

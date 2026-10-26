@@ -35,7 +35,7 @@ async function bootstrap(electron,{show=true,createInitial=true,dataRelative='da
  }
  function acceptRestart(){
   if(stopped||restarting||['starting','stopping'].includes(service.state))throw Object.assign(Error('SERVICE_RESTART_IN_PROGRESS'),{code:'SERVICE_RESTART_IN_PROGRESS'});
-  restarting=true;setImmediate(()=>restart().catch(error=>publish({...service.status(),state:'failed',error:error.code==='LOCAL_UI_RELOAD_FAILED'?error.code:'LOCAL_SERVICE_RESTART_FAILED'})).finally(()=>{restarting=false;}));
+  restarting=true;setImmediate(()=>restart().catch(error=>publish({...service.status(),state:'failed',error:['LOCAL_UI_RELOAD_FAILED','LOCAL_SERVICE_STOP_FORCED','LOCAL_SERVICE_STOP_NONZERO','LOCAL_SERVICE_STOP_FAILED','LOCAL_SERVICE_STOP_UNCONFIRMED'].includes(error.code)?error.code:'LOCAL_SERVICE_RESTART_FAILED'})).finally(()=>{restarting=false;}));
   return {accepted:true,operation:'owned_local_service_restart'};
  }
  try{

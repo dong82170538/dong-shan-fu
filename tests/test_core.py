@@ -1,3 +1,4 @@
+from tests.support import temporary_directory
 import copy
 from concurrent.futures import ThreadPoolExecutor
 import json
@@ -8,6 +9,7 @@ import sqlite3
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 
 from tests.offline_guard import sitecustomize  # Install deny guard in parent, too.
@@ -20,7 +22,7 @@ from tests.support import ROOT, POLICY, DeferredAdapter, ManualClock, fixture, p
 
 class CoreTests(unittest.TestCase):
     def setUp(self):
-        self.tmp = tempfile.TemporaryDirectory()
+        self.tmp = temporary_directory()
         self.db = Path(self.tmp.name) / 'core.sqlite3'
         self.store = Store(self.db)
         self.engines = []
@@ -229,9 +231,14 @@ print(json.dumps({'pid':os.getpid(),'db':s.path,'replay':r,'conflict':conflict})
         products = [product(f'b-product-{i:04d}') for i in range(1,1002)]
         products[-1]['test_behavior'] = {'save_fail_attempts': 1}
         task = self.submit(*products)
+        batch_started=time.monotonic()
         e = self.engine(concurrency=4)
-        # 1001 fsync-backed commits have no arbitrary 10s throughput requirement.
-        result = self.done(task,timeout=30)
+        # This is durability/counting acceptance, not a disk throughput SLA.
+        # Windows FULL-fsync writes progressed 704/1001 in the first 30s run.
+        wait_budget=90 if os.name=='nt' else 30
+        result = self.done(task,timeout=wait_budget)
+        with self.store.connect() as connection:
+            self.record('batch_durability_budget',{'seconds':time.monotonic()-batch_started,'wait_budget':wait_budget,'journal_mode':connection.execute('PRAGMA journal_mode').fetchone()[0],'synchronous':connection.execute('PRAGMA synchronous').fetchone()[0]})
         self.assertEqual((result['counts']['succeeded'], result['counts']['failed']), (1000, 1))
         self.record('first_save_attempt', {'counts':result['counts'], 'failed_item':result['items'][-1]})
         with self.store.connect() as db:

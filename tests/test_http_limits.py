@@ -1,4 +1,5 @@
 """Small loopback synthetic resource checks; never target third-party services."""
+from tests.support import temporary_directory
 import http.client
 import json
 import socket
@@ -14,7 +15,7 @@ from tests.offline_guard import sitecustomize
 
 class HttpResourceTests(unittest.TestCase):
     def setUp(self):
-        self.temp=tempfile.TemporaryDirectory();self.store=Store(self.temp.name+'/core.sqlite3');self.engine=Engine(self.store).start()
+        self.temp=temporary_directory();self.store=Store(self.temp.name+'/core.sqlite3');self.engine=Engine(self.store).start()
         self.server=make_server(self.store,self.engine,0,max_requests=2,read_deadline=.4)
         self.thread=threading.Thread(target=self.server.serve_forever,daemon=True);self.thread.start();self.clients=[]
     def tearDown(self):
@@ -52,7 +53,7 @@ class HttpResourceTests(unittest.TestCase):
 
 class TopLevelSchemaTests(unittest.TestCase):
     def test_unexpected_sensitive_fields_are_400_without_state_change(self):
-        with tempfile.TemporaryDirectory() as folder:
+        with temporary_directory() as folder:
             store=Store(folder+'/core.sqlite3');engine=Engine(store) # Intentionally not running: no fixture races.
             imported=store.import_fixture(fixture());task=store.submit(imported['id'],POLICY,'schema')['id']
             scheduled=store.schedule(imported['id'],POLICY,store.clock()+3600)

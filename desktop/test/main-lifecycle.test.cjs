@@ -22,3 +22,7 @@ test('live window reload failure is reported, destroyed window failure is harmle
  await assert.rejects(reloadWindows(new Set([{isDestroyed:()=>false,loadURL:async()=>{throw Error('synthetic');}}]),'http://127.0.0.1:9000'),error=>error.code==='LOCAL_UI_RELOAD_FAILED');
  let dead=false;await reloadWindows(new Set([{isDestroyed:()=>dead,loadURL:async()=>{dead=true;throw Error('closed during navigation');}}]),'http://127.0.0.1:9000');
 });
+
+for(const code of ['LOCAL_SERVICE_STOP_FORCED','LOCAL_SERVICE_STOP_NONZERO'])test(code+' propagates to the native quit gate without allowing clean exit (Electron event double)',async()=>{
+ const x=load(async()=>{throw Object.assign(Error(code),{code});});x.app.quit();await flush();x.app.quit();await flush();assert.ok(x.quitEvents.every(event=>event.prevented));assert.equal(x.stops,1);assert.deepEqual(x.exits,[]);
+});

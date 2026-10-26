@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import threading
 import time
+import tempfile
 
 from commerce_core.domain import evaluate
 
@@ -37,6 +38,15 @@ def wait_until(predicate, timeout=10):
 
 def offline_env():
     return {**os.environ, 'PYTHONPATH': str(ROOT / 'tests/offline_guard') + os.pathsep + str(ROOT), 'PYTHONDONTWRITEBYTECODE': '1'}
+
+
+def temporary_directory(*args,**kwargs):
+    root=Path(os.environ.get('DSF_TEST_TEMP_ROOT',ROOT/'artifacts'/'test-temp')).resolve()
+    root.relative_to(ROOT.resolve())
+    root.mkdir(parents=True,exist_ok=True)
+    if 'dir' in kwargs:Path(kwargs['dir']).resolve().relative_to(root)
+    kwargs.setdefault('dir',str(root))
+    return tempfile.TemporaryDirectory(*args,**kwargs)
 
 
 class ManualClock:

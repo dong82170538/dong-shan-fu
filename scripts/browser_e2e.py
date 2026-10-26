@@ -12,38 +12,36 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-from tests.support import offline_env
+from tests.support import offline_env, temporary_directory
 from tests.offline_guard import sitecustomize
 from playwright.sync_api import sync_playwright
-from process_tools import startup_line
+from process_tools import startup_line, stop_service
 
 
 def main():
     out = ROOT / os.environ.get('DSF_ARTIFACT_DIR','artifacts')
     out.mkdir(parents=True,exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix='commerce-ui-') as folder:
+    with temporary_directory(prefix='commerce-ui-') as folder:
         db = str(Path(folder) / 'ui.sqlite3')
         with socket.socket() as socket_probe:
             socket_probe.bind(('127.0.0.1', 0))
             port = socket_probe.getsockname()[1]
         url = f'http://127.0.0.1:{port}'
         def start():
-            p = subprocess.Popen([sys.executable, '-m', 'commerce_core', '--db', db, 'serve', '--port', str(port)], cwd=ROOT, env=offline_env(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            p = subprocess.Popen([sys.executable, '-m', 'commerce_core', '--db', db, 'serve', '--port', str(port)]+(['--stdio-control'] if os.name=='nt' else []), cwd=ROOT, env=offline_env(), stdin=subprocess.PIPE if os.name=='nt' else subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             line = startup_line(p)
             if not line.startswith('Fixture-only UI:'):
                 p.terminate(); p.wait(timeout=10)
                 raise RuntimeError('Server did not start: ' + p.stderr.read())
             return p
         def stop(p):
-            p.terminate()
-            p.wait(timeout=10)
-            assert p.returncode == 0, p.stderr.read()
-            p.stdout.close(); p.stderr.close()
+            stop_service(p)
         p = start()
         try:
             with sync_playwright() as pw:
-                browser = pw.chromium.launch(executable_path=os.environ.get('COMMERCE_CHROMIUM','/usr/bin/chromium'), headless=True, args=['--no-sandbox', '--disable-background-networking', '--disable-component-update', '--disable-default-apps'])
-                context = browser.new_context(accept_downloads=True, viewport={'width':1440,'height':1100}, service_workers='block')
+                profile=out/'browser-main-profile';cache=out/'browser-main-cache'
+                if profile.exists():raise RuntimeError('FRESH_BROWSER_PROFILE_REQUIRED')
+                context = pw.chromium.launch_persistent_context(str(profile),executable_path=os.environ.get('COMMERCE_CHROMIUM','/usr/bin/chromium'),headless=(os.name!='nt'),accept_downloads=True,downloads_path=str(out/'browser-main-downloads'),viewport={'width':1440,'height':1100},service_workers='block',ignore_default_args=(['--no-sandbox'] if os.name=='nt' else []),args=['--disable-background-networking','--disable-component-update','--disable-default-apps','--disk-cache-dir='+str(cache)])
                 denied = []
                 def network_guard(route):
                     if route.request.url.startswith(url + '/'):
@@ -53,6 +51,8 @@ def main():
                         route.abort()
                 context.route('**/*', network_guard)
                 page = context.new_page()
+                http_responses=[]
+                page.on('response',lambda response:http_responses.append({'method':response.request.method,'url':response.url,'status':response.status}) if len(http_responses)<2000 else None)
                 errors = []
                 page.on('pageerror', lambda error: errors.append(str(error)))
                 page.goto(url)
@@ -95,7 +95,7 @@ def main():
                 assert p.pid != first_pid
                 assert not errors, errors
                 assert not denied, denied
-                report = {'status':'PASS','source':'test_fixture','first_server_pid':first_pid,'second_server_pid':p.pid,
+                report = {'status':'PASS','browser_version':context.browser.version,'browser_executable':os.environ.get('COMMERCE_CHROMIUM','/usr/bin/chromium'),'fresh_profile':str(profile),'disk_cache':str(cache),'headless':os.name!='nt','http_responses':http_responses,'source':'test_fixture','first_server_pid':first_pid,'second_server_pid':p.pid,
                           'same_database_path':db, 'database_evidence':str(out/'ui-core.sqlite3'),
                           'task_id':task_id,'persisted_products':1,'sale':{'amount':'1080.00','currency':'RUB'},
                           'strike':{'amount':'1920.00','currency':'RUB'},'published':0,'duplicate_task_count':1,
@@ -108,7 +108,7 @@ def main():
                 try: source.backup(dest)
                 finally: source.close(); dest.close()
                 print(json.dumps(report,ensure_ascii=False))
-                browser.close()
+                context.close()
         finally:
             if p.poll() is None: stop(p)
 

@@ -1,3 +1,4 @@
+from tests.support import temporary_directory
 from concurrent.futures import Future, ThreadPoolExecutor
 from datetime import datetime, timezone
 import json
@@ -24,7 +25,7 @@ from commerce_core.extension_rules import preview
 
 class OfflineWorkflowTests(unittest.TestCase):
     def setUp(self):
-        self.tmp=tempfile.TemporaryDirectory()
+        self.tmp=temporary_directory()
         self.path=Path(self.tmp.name)/'core.sqlite3'
         self.clock=ManualClock();self.clock.now=1792889400
         self.store=Store(self.path,clock=self.clock)

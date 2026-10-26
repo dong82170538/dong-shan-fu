@@ -1,4 +1,5 @@
 """Real active Engine process locking and forced-owner termination."""
+from tests.support import temporary_directory
 import json
 import os
 from pathlib import Path
@@ -12,7 +13,7 @@ from tests.support import ROOT,offline_env,wait_until
 
 class EngineProcessTests(unittest.TestCase):
     def test_live_engine_lock_contention_kill_and_recovery(self):
-        with tempfile.TemporaryDirectory() as folder:
+        with temporary_directory() as folder:
             db=Path(folder)/'core.sqlite3';ready=Path(folder)/'owner-ready.json'
             code='''import json,os,sys,threading
 from pathlib import Path

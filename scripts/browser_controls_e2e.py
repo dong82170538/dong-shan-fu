@@ -3,33 +3,34 @@ import json,os,re,sqlite3,subprocess,sys,tempfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent.parent
 sys.path.insert(0,str(ROOT))
-from tests.support import offline_env
+from tests.support import offline_env, temporary_directory
 from tests.offline_guard import sitecustomize
 from playwright.sync_api import sync_playwright
-from process_tools import startup_line
+from process_tools import startup_line, stop_service
 
 def main():
  out=ROOT/os.environ.get('DSF_ARTIFACT_DIR','artifacts/stage3');out.mkdir(parents=True,exist_ok=True)
- with tempfile.TemporaryDirectory(prefix='dsf-web-controls-') as folder:
+ with temporary_directory(prefix='dsf-web-controls-') as folder:
   db=str(Path(folder)/'core.sqlite3');process=None
   def start():
-   p=subprocess.Popen([sys.executable,'-u','-X','utf8','-m','commerce_core','--db',db,'serve','--port','0'],cwd=ROOT,env=offline_env(),stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+   p=subprocess.Popen([sys.executable,'-u','-X','utf8','-m','commerce_core','--db',db,'serve','--port','0']+(['--stdio-control'] if os.name=='nt' else []),cwd=ROOT,env=offline_env(),stdin=subprocess.PIPE if os.name=='nt' else subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
    line=startup_line(p);match=re.match(r'Fixture-only UI: (http://127\.0\.0\.1:\d+) \| DB:',line)
    if not match:p.terminate();p.wait(timeout=10);raise RuntimeError('OWNED_SERVICE_START_FAILED')
    return p,match.group(1)
   def stop(p):
-   p.terminate();p.wait(timeout=10)
-   assert p.returncode==0,'OWNED_SERVICE_STOP_FAILED'
-   p.stdout.close();p.stderr.close()
+   stop_service(p)
   process,origin=start();first_pid=process.pid;origins={origin}
   try:
    with sync_playwright() as p:
-    browser=p.chromium.launch(executable_path=os.environ.get('COMMERCE_CHROMIUM','/usr/bin/chromium'),headless=True,args=['--no-sandbox','--disable-background-networking','--disable-component-update','--disable-default-apps'])
-    context=browser.new_context(accept_downloads=True);denied=[]
+    profile=out/'browser-controls-profile';cache=out/'browser-controls-cache'
+    if profile.exists():raise RuntimeError('FRESH_BROWSER_PROFILE_REQUIRED')
+    context=p.chromium.launch_persistent_context(str(profile),executable_path=os.environ.get('COMMERCE_CHROMIUM','/usr/bin/chromium'),headless=(os.name!='nt'),accept_downloads=True,downloads_path=str(out/'browser-controls-downloads'),service_workers='block',ignore_default_args=(['--no-sandbox'] if os.name=='nt' else []),args=['--disable-background-networking','--disable-component-update','--disable-default-apps','--disk-cache-dir='+str(cache)]);denied=[]
     def route(request):
      if any(request.request.url.startswith(owned+'/') for owned in origins):request.continue_()
      else:denied.append(request.request.url);request.abort()
     context.route('**/*',route);page=context.new_page();errors=[];page.on('pageerror',lambda error:errors.append(str(error)))
+    http_responses=[]
+    page.on('response',lambda response:http_responses.append({'method':response.request.method,'url':response.url,'status':response.status}) if len(http_responses)<2000 else None)
     page.goto(origin);page.wait_for_function("() => document.getElementById('fixture-json').value.includes('test_fixture')")
     def fixture(name,behavior):return {'schema_version':1,'source':'test_fixture','name':name,'products':[{'external_id':name,'platform':'OZON','title':'Fictional controls product','selection':{'price':'1000.00','currency':'RUB','sold_count':151},'skus':[{'sku':name,'stock':5,'cost':'100.00','currency':'CNY','original_price':'160.00'}],'test_behavior':behavior}]}
     def import_submit(raw,key):
@@ -74,8 +75,8 @@ def main():
     source=sqlite3.connect(db);dest=sqlite3.connect(out/'controls-core.sqlite3')
     try:source.backup(dest)
     finally:source.close();dest.close()
-    report={'status':'PASS','scope':'Real Chromium Web-compatible UI and Python/SQLite; NOT Electron/native IPC','first_pid':first_pid,'second_pid':process.pid,'same_database':db,'checks':['pause/resume/cancel','late canceled worker never saved','failed item retry to actual saved result','RUB1080.00 and JSON download','strict schema error without fake success','actual server outage retains and labels last data','new owned port+PID restart rereads data','late real A HTTP response cannot overwrite newly selected B'],'canceled_counts':canceled['counts'],'retry_attempt':task['items'][0]['attempt'],'saved':data['summary']['saved'],'published':0,'page_errors':errors,'external_page_requests':denied}
-    (out/'browser-controls-result.json').write_text(json.dumps(report,ensure_ascii=False,indent=2));print(json.dumps(report,ensure_ascii=False));browser.close()
+    report={'status':'PASS','browser_version':context.browser.version,'browser_executable':os.environ.get('COMMERCE_CHROMIUM','/usr/bin/chromium'),'fresh_profile':str(profile),'disk_cache':str(cache),'headless':os.name!='nt','http_responses':http_responses,'scope':'Real Chromium Web-compatible UI and Python/SQLite; NOT Electron/native IPC','first_pid':first_pid,'second_pid':process.pid,'same_database':db,'checks':['pause/resume/cancel','late canceled worker never saved','failed item retry to actual saved result','RUB1080.00 and JSON download','strict schema error without fake success','actual server outage retains and labels last data','new owned port+PID restart rereads data','late real A HTTP response cannot overwrite newly selected B'],'canceled_counts':canceled['counts'],'retry_attempt':task['items'][0]['attempt'],'saved':data['summary']['saved'],'published':0,'page_errors':errors,'external_page_requests':denied}
+    (out/'browser-controls-result.json').write_text(json.dumps(report,ensure_ascii=False,indent=2));print(json.dumps(report,ensure_ascii=False));context.close()
   finally:
    if process and process.poll() is None:stop(process)
 if __name__=='__main__':main()

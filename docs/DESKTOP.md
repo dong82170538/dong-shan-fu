@@ -8,6 +8,6 @@ Node24.19+用于开发；Electron精确依赖44.9.3及传递锁文件已提供�
 
 sandbox/contextIsolation/webSecurity开启，renderer Node、外部导航/窗口、webview、权限与下载关闭。未通过实际Electron验收，不能把Node的明确test doubles或Chromium网页通过当作原生隔离证据。
 
-测试入口node desktop/scripts/test.cjs由标准库Linux监督器管理期限和后代归属；内外超时、runner异常、父包装器死亡均有真实heartbeat/文件锁回归。系统不支持subreaper/pidfd时BLOCKED，不回退只杀直接runner。最外监督器自身被SIGKILL或主机崩溃不在清理保证内。Windows R2模块尚未接收或集成，Windows整套仍BLOCKED。
+node desktop/scripts/test.cjs uses platform-owned supervision. Linux retains its original subreaper/pidfd backend. Windows integrates the independently reviewed R2 Job runner. An explicit outer acceptance Job guard allows inner ownership tests without removing the nested-wrapper marker. Root exit0 is insufficient for PASS if descendants remain, deadline/stop wins, or cleanup is uncertain. Outermost supervisor/host/kernel crash extremes are not universally guaranteed. See WINDOWS_INTEGRATION.md.
 
-正式原生验收需先批准、核验并放置本项目的44.9.3运行时，再显式授权启动。启动器只接受项目node_modules/electron/dist或approved-runtime，不使用npx自动下载。官方Windows资产精确大小/SHA256尚需核验。
+Native desktop acceptance still needs approval and a project-local Electron 44.9.3 runtime. The metadata check found package/executable absent; no Electron was downloaded or executed. Runtime lookup stays limited to project node_modules/electron/dist or approved-runtime, with no npx automatic download. Windows service shutdown uses an owner-only stdin pipe (LF/CRLF/EOF); Unix keeps its signal path. Real Node-owned Python start/stop/restart passed; this is not native Electron IPC.

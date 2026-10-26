@@ -9,6 +9,8 @@ import unittest
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 from tests.offline_guard import sitecustomize
+from snapshot_contract import code_manifest,collect_sources,manifest_sha
+INPUT_BEFORE=code_manifest(collect_sources())
 
 out = ROOT / os.environ.get('DSF_ARTIFACT_DIR','artifacts')
 out.mkdir(parents=True,exist_ok=True)
@@ -38,8 +40,11 @@ for scenario in scenarios:
     matching = [r for r in records if scenario.get('test') and scenario['test'] in r['test']]
     scenario['status'] = ('PASS' if all(r['status']=='PASS' for r in matching) else 'FAIL') if matching else ('BLOCKED' if scenario.get('blocker') else 'NOT_RUN')
     scenario['executed_tests'] = [r['test'] for r in matching]
+INPUT_AFTER=code_manifest(collect_sources())
+INPUT_UNCHANGED=INPUT_BEFORE==INPUT_AFTER
 report = {
-    'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(), 'status':'PASS' if result.wasSuccessful() else 'FAIL',
+    'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(), 'status':'PASS' if result.wasSuccessful() and INPUT_UNCHANGED else 'FAIL',
+    'runtime_code_manifest_before':INPUT_BEFORE,'runtime_code_manifest_after':INPUT_AFTER,'runtime_code_unchanged':INPUT_UNCHANGED,'runtime_code_manifest_sha256':manifest_sha(INPUT_BEFORE),
     'scope':'first local fixture milestone, not full product reconstruction', 'test_count':result.testsRun,
     'failure_count':len(result.failures),'error_count':len(result.errors),'skip_count':len(result.skipped),
     'network':'Python audit guard covers connect/sendto/sendmsg and listed DNS events; not OS-level isolation. Browser requests have a separate loopback route policy.',
@@ -50,6 +55,6 @@ report = {
     'unverified':['Windows packaging/runtime','native desktop IPC','packaged MV3 extension','real merchant integration','original ERP modules','original upstream source parity']}
 (out/'test-results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
 print(json.dumps({'status':report['status'],'tests':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'report':str(out/'test-results.json')},ensure_ascii=False))
-if not result.wasSuccessful():
+if not result.wasSuccessful() or not INPUT_UNCHANGED:
     print((out/'test-output.txt').read_text())
     sys.exit(1)

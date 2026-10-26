@@ -19,6 +19,7 @@ def main():
     serve = sub.add_parser("serve")
     serve.add_argument("--port", type=int, default=8765)
     serve.add_argument("--concurrency", type=int, default=2)
+    serve.add_argument("--stdio-control", action="store_true", help="Owned parent pipe shutdown only")
     serve.add_argument("--fixture-extension-id", action="append", default=[], help="Explicitly trust this self-built MV3 ID for fixture preview only")
     imp = sub.add_parser("import-fixture")
     imp.add_argument("file")
@@ -86,6 +87,12 @@ def main():
                 threading.Thread(target=server.shutdown, daemon=True).start()
             signal.signal(signal.SIGTERM, stop)
             signal.signal(signal.SIGINT, stop)
+            if args.stdio_control:
+                def owned_pipe():
+                    line=sys.stdin.buffer.readline(128)
+                    if line in (b'DSF_SHUTDOWN\n',b'DSF_SHUTDOWN\r\n',b''):
+                        stop(None,None)
+                threading.Thread(target=owned_pipe,daemon=True,name='owned-stdio-control').start()
             print(f"Fixture-only UI: http://127.0.0.1:{server.server_port} | DB: {store.path}", flush=True)
             server.serve_forever(poll_interval=0.1)
         finally:

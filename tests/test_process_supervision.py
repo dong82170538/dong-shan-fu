@@ -1,4 +1,5 @@
 """Real timeout/abnormal-exit regression; no network and no name-based killing."""
+from tests.support import temporary_directory
 import json
 import os
 from pathlib import Path
@@ -14,11 +15,11 @@ sys.path.insert(0, str(ROOT/'scripts'))
 from owned_process import run_owned, OwnershipUnsupported
 
 
-@unittest.skipUnless(sys.platform == 'linux', 'BLOCKED: Windows equivalent Job ownership not implemented/tested')
+@unittest.skipUnless(sys.platform == 'linux', 'Linux subreaper/pidfd regression; Windows Job regressions are separate')
 class ProcessSupervisionTests(unittest.TestCase):
     def test_unsupported_platform_does_not_start_a_command(self):
         from unittest.mock import patch
-        with patch('owned_process.sys.platform', 'win32'), patch('owned_process.subprocess.Popen') as launch:
+        with patch('owned_process.sys.platform', 'unsupported-test-platform'), patch('owned_process.subprocess.Popen') as launch:
             with self.assertRaises(OwnershipUnsupported):
                 run_owned([sys.executable, '-c', 'print("must not start")'], cwd=ROOT, timeout=1)
             launch.assert_not_called()
@@ -57,7 +58,7 @@ class ProcessSupervisionTests(unittest.TestCase):
         self.assertEqual(result['stdout'].strip(), 'normal_after_cleanup')
 
     def test_outer_timeout_reaps_heartbeat_grandchildren_and_releases_locks(self):
-        with tempfile.TemporaryDirectory(prefix='dsf-owned-outer-') as temp:
+        with temporary_directory(prefix='dsf-owned-outer-') as temp:
             folder = Path(temp); nonce = uuid.uuid4().hex
             result = run_owned(self.tree_command(folder, nonce), cwd=ROOT, timeout=0.8)
             self.assertEqual(result['reason'], 'timeout'); self.assertEqual(result['status'], 'FAIL')
@@ -66,7 +67,7 @@ class ProcessSupervisionTests(unittest.TestCase):
             self.check_reusable(); self.evidence('outer-timeout', {'processes': records, 'directory': temp, 'supervision': result})
 
     def test_abnormal_runner_exit_cleans_adopted_descendants(self):
-        with tempfile.TemporaryDirectory(prefix='dsf-owned-exit-') as temp:
+        with temporary_directory(prefix='dsf-owned-exit-') as temp:
             folder = Path(temp); nonce = uuid.uuid4().hex
             result = run_owned(self.tree_command(folder, nonce, 'abnormal'), cwd=ROOT, timeout=2)
             self.assertEqual(result['reason'], 'runner_exit_nonzero'); self.assertEqual(result['exit_code'], 23)
@@ -74,7 +75,7 @@ class ProcessSupervisionTests(unittest.TestCase):
             self.check_reusable(); self.evidence('runner-abnormal-exit', {'processes': records, 'directory': temp, 'supervision': result})
 
     def test_zero_runner_exit_with_orphans_is_not_pass(self):
-        with tempfile.TemporaryDirectory(prefix='dsf-owned-zero-') as temp:
+        with temporary_directory(prefix='dsf-owned-zero-') as temp:
             folder = Path(temp); nonce = uuid.uuid4().hex
             result = run_owned(self.tree_command(folder, nonce, 'zero_orphan'), cwd=ROOT, timeout=2)
             self.assertEqual(result['reason'], 'runner_exit_zero'); self.assertEqual(result['status'], 'FAIL')
@@ -85,7 +86,7 @@ class ProcessSupervisionTests(unittest.TestCase):
         return ['node', '-e', code]
 
     def test_inner_node_timeout_uses_same_cleanup_and_outer_does_not_mask_it(self):
-        with tempfile.TemporaryDirectory(prefix='dsf-owned-inner-') as temp:
+        with temporary_directory(prefix='dsf-owned-inner-') as temp:
             folder=Path(temp); nonce=uuid.uuid4().hex
             env=dict(os.environ, DSF_PYTHON=sys.executable, DSF_HEARTBEAT_DIR=temp, DSF_HEARTBEAT_NONCE=nonce)
             result=run_owned(self.node_command(folder,1000),cwd=ROOT,env=env,timeout=6)
@@ -96,7 +97,7 @@ class ProcessSupervisionTests(unittest.TestCase):
             self.evidence('inner-node-timeout',{'processes':records,'directory':temp,'inner':inner,'outer':result})
 
     def test_outer_timeout_during_inner_supervision_cleans_whole_owned_tree(self):
-        with tempfile.TemporaryDirectory(prefix='dsf-owned-nested-') as temp:
+        with temporary_directory(prefix='dsf-owned-nested-') as temp:
             folder=Path(temp);nonce=uuid.uuid4().hex
             env=dict(os.environ,DSF_PYTHON=sys.executable,DSF_HEARTBEAT_DIR=temp,DSF_HEARTBEAT_NONCE=nonce)
             result=run_owned(self.node_command(folder,10000),cwd=ROOT,env=env,timeout=1)
@@ -105,7 +106,7 @@ class ProcessSupervisionTests(unittest.TestCase):
             self.evidence('outer-during-inner',{'processes':records,'directory':temp,'outer':result})
 
     def test_node_wrapper_death_requests_inner_supervisor_cleanup(self):
-        with tempfile.TemporaryDirectory(prefix='dsf-owned-parent-death-') as temp:
+        with temporary_directory(prefix='dsf-owned-parent-death-') as temp:
             folder=Path(temp);nonce=uuid.uuid4().hex
             env=dict(os.environ,DSF_PYTHON=sys.executable,DSF_HEARTBEAT_DIR=temp,DSF_HEARTBEAT_NONCE=nonce)
             # Only this explicitly created child is killed. The surrounding
