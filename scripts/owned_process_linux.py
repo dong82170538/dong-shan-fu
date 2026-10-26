@@ -26,7 +26,7 @@ class OwnershipUnsupported(RuntimeError):
 def _stat(pid):
     try:
         text = Path(f'/proc/{pid}/stat').read_text()
-    except FileNotFoundError:
+    except (FileNotFoundError, ProcessLookupError):
         return None
     fields = text[text.rfind(')')+2:].split()
     return {'pid': pid, 'ppid': int(fields[1]), 'start_ticks': int(fields[19]), 'state': fields[0]}
@@ -81,7 +81,11 @@ def _remember(known):
             fd = os.pidfd_open(pid)
         except ProcessLookupError:
             continue
-        again = _stat(pid)
+        try:
+            again = _stat(pid)
+        except BaseException:
+            os.close(fd)
+            raise
         if again is None or (again['ppid'], again['start_ticks']) != (row['ppid'], row['start_ticks']):
             os.close(fd)
             continue

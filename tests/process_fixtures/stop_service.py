@@ -26,7 +26,7 @@ if args.mode=='nonzero':
  if os.name!='nt':signal.signal(signal.SIGTERM,lambda *_:request_exit())
  def read_command():
   sys.stdin.buffer.readline(128);request_exit()
- threading.Thread(target=read_command,daemon=True).start()
+ if os.name=='nt':threading.Thread(target=read_command,daemon=True).start()
 (folder/'stop-fixture.json').write_text(json.dumps({'pid':os.getpid(),'nonce':args.nonce,'mode':args.mode}),encoding='utf-8')
 beat=folder/'stop-fixture.heartbeat';beat.write_text(str(time.monotonic_ns()),encoding='ascii');print('OWNED_STOP_READY',flush=True)
 try:

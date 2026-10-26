@@ -19,7 +19,7 @@ from owned_process import run_owned, OwnershipUnsupported
 class ProcessSupervisionTests(unittest.TestCase):
     def test_unsupported_platform_does_not_start_a_command(self):
         from unittest.mock import patch
-        with patch('owned_process.sys.platform', 'unsupported-test-platform'), patch('owned_process.subprocess.Popen') as launch:
+        with patch('owned_process.subprocess.Popen') as launch, patch('owned_process.sys.platform', 'unsupported-test-platform'):
             with self.assertRaises(OwnershipUnsupported):
                 run_owned([sys.executable, '-c', 'print("must not start")'], cwd=ROOT, timeout=1)
             launch.assert_not_called()
