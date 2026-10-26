@@ -1,0 +1,9 @@
+[project]
+name = "dong-shan-fu-core"
+version = "0.1.0"
+description = "Independent local commerce task core with explicit synthetic adapters"
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.unittest]
+start-directory = "tests"

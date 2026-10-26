@@ -1,0 +1,825 @@
+{
+  "source": "parent static evidence",
+  "bundle": "public index-UfcrK0nX.js",
+  "materialized_original_source": false,
+  "status": "inventory_only_not_implementation",
+  "expressions_are_inert_text": true,
+  "routes": [
+    {
+      "path": "\"/empty\"",
+      "name": "Empty",
+      "meta": null,
+      "redirect": null,
+      "evidence": {
+        "start": 4388557,
+        "end": 4388605,
+        "line": 621,
+        "column": 31152
+      }
+    },
+    {
+      "path": "\"index\"",
+      "name": "Index",
+      "meta": "{title:\"首页\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4388606,
+        "end": 4388746,
+        "line": 621,
+        "column": 31201
+      }
+    },
+    {
+      "path": "\"\"",
+      "name": "IndexList1",
+      "meta": null,
+      "redirect": "\"/index\"",
+      "evidence": {
+        "start": 4388747,
+        "end": 4388783,
+        "line": 621,
+        "column": 31342
+      }
+    },
+    {
+      "path": "\"/vip\"",
+      "name": "Vip",
+      "meta": "{title:\"VIP服务\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4388784,
+        "end": 4388925,
+        "line": 621,
+        "column": 31379
+      }
+    },
+    {
+      "path": "\"/subAccount\"",
+      "name": "SubAccount",
+      "meta": "{title:\"子账号\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4388926,
+        "end": 4389082,
+        "line": 621,
+        "column": 31521
+      }
+    },
+    {
+      "path": "\"/rechargeHistory\"",
+      "name": "RechargeHistory",
+      "meta": "{title:\"充值记录\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4389083,
+        "end": 4389247,
+        "line": 621,
+        "column": 31678
+      }
+    },
+    {
+      "path": "\"/creditLimitRecord\"",
+      "name": "CreditLimitRecord",
+      "meta": "{title:\"额度记录\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4389248,
+        "end": 4389415,
+        "line": 621,
+        "column": 31843
+      }
+    },
+    {
+      "path": "\"/promotion\"",
+      "name": "Promotion",
+      "meta": "{title:\"推广赚钱\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4389416,
+        "end": 4389563,
+        "line": 621,
+        "column": 32011
+      }
+    },
+    {
+      "path": "\"/onlineUserManage\"",
+      "name": "OnlineUserManage",
+      "meta": "{title:\"设备管理\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4389564,
+        "end": 4389729,
+        "line": 621,
+        "column": 32159
+      }
+    },
+    {
+      "path": "\"/orderTotal\"",
+      "name": "OrderTotal",
+      "meta": "{title:\"订单概况\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4389730,
+        "end": 4389912,
+        "line": 621,
+        "column": 32325
+      }
+    },
+    {
+      "path": "\"/createGoods\"",
+      "name": "CreateGoodsRedirect",
+      "meta": "{title:\"上架商品\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4389913,
+        "end": 4390007,
+        "line": 621,
+        "column": 32508
+      }
+    },
+    {
+      "path": "\"/editGoods\"",
+      "name": "CreateGoods",
+      "meta": "{title:\"上架商品\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4390008,
+        "end": 4390099,
+        "line": 621,
+        "column": 32603
+      }
+    },
+    {
+      "path": "\"/editWbGoods\"",
+      "name": "CreateWbGoods",
+      "meta": "{title:\"上架商品\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4390100,
+        "end": 4390195,
+        "line": 621,
+        "column": 32695
+      }
+    },
+    {
+      "path": "\"/editUpTemplate\"",
+      "name": "EditUpTemplate",
+      "meta": "{title:\"模板编辑\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4390196,
+        "end": 4390292,
+        "line": 621,
+        "column": 32791
+      }
+    },
+    {
+      "path": "\"/editUpTemplateWb\"",
+      "name": "EditUpTemplateWb",
+      "meta": "{title:\"模板编辑\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4390293,
+        "end": 4390393,
+        "line": 621,
+        "column": 32888
+      }
+    },
+    {
+      "path": "\"/message\"",
+      "name": "Message",
+      "meta": "{title:\"消息通知\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4390394,
+        "end": 4390475,
+        "line": 621,
+        "column": 32989
+      }
+    },
+    {
+      "path": "\"/desContentManage\"",
+      "name": "DesContentManage",
+      "meta": "{title:\"简介后缀\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4390476,
+        "end": 4390585,
+        "line": 621,
+        "column": 33071
+      }
+    },
+    {
+      "path": "\"/buyerBackList\"",
+      "name": "BuyerBackList",
+      "meta": "{title:\"买家黑名单\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4390586,
+        "end": 4390685,
+        "line": 621,
+        "column": 33181
+      }
+    },
+    {
+      "path": "\"/brandManage\"",
+      "name": "BrandManage",
+      "meta": "{title:\"品牌集\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4390686,
+        "end": 4390779,
+        "line": 621,
+        "column": 33281
+      }
+    },
+    {
+      "path": "\"/oldFixPrice\"",
+      "name": "OldFixPrice",
+      "meta": "{title:\"旧版定价器\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4390780,
+        "end": 4390872,
+        "line": 621,
+        "column": 33375
+      }
+    },
+    {
+      "path": "\"history\"",
+      "name": "History",
+      "meta": "{title:\"热词精选\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4390879,
+        "end": 4390960,
+        "line": 621,
+        "column": 33474
+      }
+    },
+    {
+      "path": "\"goodsCollect\"",
+      "name": "GoodsCollect",
+      "meta": "{title:\"采集箱\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4390961,
+        "end": 4391056,
+        "line": 621,
+        "column": 33556
+      }
+    },
+    {
+      "path": "\"/shopManage\"",
+      "name": "ShopManage",
+      "meta": "{title:\"店铺管理\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4391057,
+        "end": 4391148,
+        "line": 621,
+        "column": 33652
+      }
+    },
+    {
+      "path": "\"/pictureManage\"",
+      "name": "PictureManage",
+      "meta": "{title:\"图片管理\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4391149,
+        "end": 4391304,
+        "line": 621,
+        "column": 33744
+      }
+    },
+    {
+      "path": "\"/batchRecord\"",
+      "name": "BatchRecord",
+      "meta": "{title:\"上架记录\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4391305,
+        "end": 4391399,
+        "line": 621,
+        "column": 33900
+      }
+    },
+    {
+      "path": "\"/fixPrice\"",
+      "name": "FixPrice",
+      "meta": "{title:\"定价器\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4391400,
+        "end": 4391484,
+        "line": 621,
+        "column": 33995
+      }
+    },
+    {
+      "path": "\"/fixPriceWb\"",
+      "name": "FixPriceWb",
+      "meta": "{title:\"定价器\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4391485,
+        "end": 4391573,
+        "line": 621,
+        "column": 34080
+      }
+    },
+    {
+      "path": "\"/profit\"",
+      "name": "Profit",
+      "meta": "{title:\"利润计算\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4391574,
+        "end": 4391655,
+        "line": 621,
+        "column": 34169
+      }
+    },
+    {
+      "path": "\"/profitWb\"",
+      "name": "ProfitWb",
+      "meta": "{title:\"利润计算\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4391656,
+        "end": 4391741,
+        "line": 621,
+        "column": 34251
+      }
+    },
+    {
+      "path": "\"/orderManage\"",
+      "name": "OrderManage",
+      "meta": "{title:\"我的订单\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4391742,
+        "end": 4391835,
+        "line": 621,
+        "column": 34337
+      }
+    },
+    {
+      "path": "\"/autoMsg\"",
+      "name": "AutoMsg",
+      "meta": "{title:\"消息模板\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4391836,
+        "end": 4391918,
+        "line": 621,
+        "column": 34431
+      }
+    },
+    {
+      "path": "\"/msgRecord\"",
+      "name": "MsgRecord",
+      "meta": "{title:\"消息记录\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4391919,
+        "end": 4392005,
+        "line": 621,
+        "column": 34514
+      }
+    },
+    {
+      "path": "\"/refundList\"",
+      "name": "RefundList",
+      "meta": "{title:\"退货申请\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4392006,
+        "end": 4392098,
+        "line": 621,
+        "column": 34601
+      }
+    },
+    {
+      "path": "\"/overview\"",
+      "name": "Overview",
+      "meta": "{title:\"大盘总览\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4392099,
+        "end": 4392184,
+        "line": 621,
+        "column": 34694
+      }
+    },
+    {
+      "path": "\"/chinaHotSales\"",
+      "name": "ChinaHotSales",
+      "meta": "{title:\"中国专区\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4392185,
+        "end": 4392285,
+        "line": 621,
+        "column": 34780
+      }
+    },
+    {
+      "path": "\"/wbHotProduct\"",
+      "name": "WbHotProduct",
+      "meta": "{title:\"热销产品\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4392286,
+        "end": 4392376,
+        "line": 621,
+        "column": 34881
+      }
+    },
+    {
+      "path": "\"/categoryAnalysis\"",
+      "name": "CategoryAnalysis",
+      "meta": "{title:\"类目分析\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4392377,
+        "end": 4392486,
+        "line": 621,
+        "column": 34972
+      }
+    },
+    {
+      "path": "\"/remai\"",
+      "name": "Remai",
+      "meta": "{title:\"热销产品\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4392487,
+        "end": 4392563,
+        "line": 621,
+        "column": 35082
+      }
+    },
+    {
+      "path": "\"/saleGoods\"",
+      "name": "SaleGoods",
+      "meta": "{title:\"促销活动\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4392564,
+        "end": 4392652,
+        "line": 621,
+        "column": 35159
+      }
+    },
+    {
+      "path": "\"/saleAutoMove\"",
+      "name": "SaleAutoMove",
+      "meta": "{title:\"自动移出促销\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4392653,
+        "end": 4392749,
+        "line": 621,
+        "column": 35248
+      }
+    },
+    {
+      "path": "\"/goodsManage\"",
+      "name": "GoodsManage",
+      "meta": "{title:\"线上商品\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4392750,
+        "end": 4392844,
+        "line": 621,
+        "column": 35345
+      }
+    },
+    {
+      "path": "\"/wbGoodsManage\"",
+      "name": "WbGoodsManage",
+      "meta": "{title:\"线上商品\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4392845,
+        "end": 4392943,
+        "line": 621,
+        "column": 35440
+      }
+    },
+    {
+      "path": "\"/keywordSearch\"",
+      "name": "KeywordSearch",
+      "meta": "{title:\"标签反查\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4392944,
+        "end": 4393044,
+        "line": 621,
+        "column": 35539
+      }
+    },
+    {
+      "path": "\"/upGoodsTemplate\"",
+      "name": "UpGoodsTemplate",
+      "meta": "{title:\"精铺模板\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4393045,
+        "end": 4393151,
+        "line": 621,
+        "column": 35640
+      }
+    },
+    {
+      "path": "\"/upGoodsSetting\"",
+      "name": "UpGoodsSetting",
+      "meta": "{title:\"上架配置\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4393152,
+        "end": 4393255,
+        "line": 621,
+        "column": 35747
+      }
+    },
+    {
+      "path": "\"/reup\"",
+      "name": "Reup",
+      "meta": "{title:\"下架重上\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4393256,
+        "end": 4393329,
+        "line": 621,
+        "column": 35851
+      }
+    },
+    {
+      "path": "\"/waterMark\"",
+      "name": "WaterMark",
+      "meta": "{title:\"水印管理\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4393330,
+        "end": 4393485,
+        "line": 621,
+        "column": 35925
+      }
+    },
+    {
+      "path": "\"/analyse\"",
+      "name": "Analyse",
+      "meta": "{title:\"运营分析\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4393486,
+        "end": 4393568,
+        "line": 621,
+        "column": 36081
+      }
+    },
+    {
+      "path": "\"/orderTimingList\"",
+      "name": "OrderTimingList",
+      "meta": "{title:\"定时上架\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4393569,
+        "end": 4393675,
+        "line": 621,
+        "column": 36164
+      }
+    },
+    {
+      "path": "\"/oglOrder\"",
+      "name": "OglOrder",
+      "meta": "{title:\"OGL组包\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4393676,
+        "end": 4393765,
+        "line": 621,
+        "column": 36271
+      }
+    },
+    {
+      "path": "\"/1688Auth\"",
+      "name": "1688Auth",
+      "meta": "{title:\"1688授权\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4393766,
+        "end": 4393910,
+        "line": 621,
+        "column": 36361
+      }
+    },
+    {
+      "path": "\"/1688Distribution\"",
+      "name": "1688Distribution",
+      "meta": "{title:\"选品铺货\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4393911,
+        "end": 4394053,
+        "line": 621,
+        "column": 36506
+      }
+    },
+    {
+      "path": "\"/purchaseRecord\"",
+      "name": "PurchaseRecord",
+      "meta": "{title:\"选品记录\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4394054,
+        "end": 4394161,
+        "line": 621,
+        "column": 36649
+      }
+    },
+    {
+      "path": "\"/login\"",
+      "name": "Login",
+      "meta": "{title:\"登录\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4394168,
+        "end": 4394312,
+        "line": 621,
+        "column": 36763
+      }
+    },
+    {
+      "path": "\"/register\"",
+      "name": "Register",
+      "meta": "{title:\"注册\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4394313,
+        "end": 4394464,
+        "line": 621,
+        "column": 36908
+      }
+    },
+    {
+      "path": "\"/registerByCode\"",
+      "name": "RegisterByCode",
+      "meta": "{title:\"邀请注册\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4394465,
+        "end": 4394626,
+        "line": 621,
+        "column": 37060
+      }
+    },
+    {
+      "path": "\"/forgetPassword\"",
+      "name": "ForgetPassword",
+      "meta": "{title:\"重置密码\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4394627,
+        "end": 4394792,
+        "line": 621,
+        "column": 37222
+      }
+    },
+    {
+      "path": "\"/privacyAgreement\"",
+      "name": "PrivacyAgreement",
+      "meta": "{title:\"用户隐私协议\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4394793,
+        "end": 4394956,
+        "line": 621,
+        "column": 37388
+      }
+    },
+    {
+      "path": "\"/vipAgreement\"",
+      "name": "VipAgreement",
+      "meta": "{title:\"会员服务协议\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4394957,
+        "end": 4395112,
+        "line": 621,
+        "column": 37552
+      }
+    },
+    {
+      "path": "\"/imageEdit\"",
+      "name": "ImageEdit",
+      "meta": "{title:\"图片美化\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4395113,
+        "end": 4395238,
+        "line": 621,
+        "column": 37708
+      }
+    },
+    {
+      "path": "\"/videoEidt\"",
+      "name": "VideoEidt",
+      "meta": "{title:\"视频编辑\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4395239,
+        "end": 4395386,
+        "line": 621,
+        "column": 37834
+      }
+    },
+    {
+      "path": "\"/activeCode\"",
+      "name": "ActiveCode",
+      "meta": "{title:\"激活码\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4395387,
+        "end": 4395534,
+        "line": 621,
+        "column": 37982
+      }
+    },
+    {
+      "path": "\"/largeScreen\"",
+      "name": "LargeScreen",
+      "meta": "{title:\"数据大屏\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4395535,
+        "end": 4395698,
+        "line": 621,
+        "column": 38130
+      }
+    },
+    {
+      "path": "\"/pickingDataShow\"",
+      "name": "PickingDataShow",
+      "meta": "{title:\"拣货单详情\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4395699,
+        "end": 4395862,
+        "line": 621,
+        "column": 38294
+      }
+    },
+    {
+      "path": "\"/test\"",
+      "name": "Test",
+      "meta": "{title:\"测试\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4395863,
+        "end": 4395991,
+        "line": 621,
+        "column": 38458
+      }
+    },
+    {
+      "path": "\"/NotFound\"",
+      "name": "NotFound",
+      "meta": "{title:\"404\"}",
+      "redirect": null,
+      "evidence": {
+        "start": 4395992,
+        "end": 4396136,
+        "line": 621,
+        "column": 38587
+      }
+    },
+    {
+      "path": "\"/\"",
+      "name": "Home",
+      "meta": null,
+      "redirect": null,
+      "evidence": {
+        "start": 4396261,
+        "end": 4396305,
+        "line": 621,
+        "column": 38856
+      }
+    },
+    {
+      "path": "\"/\"",
+      "name": "Home",
+      "meta": null,
+      "redirect": null,
+      "evidence": {
+        "start": 4396521,
+        "end": 4396565,
+        "line": 621,
+        "column": 39116
+      }
+    }
+  ]
+}

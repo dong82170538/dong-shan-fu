@@ -1,0 +1,2 @@
+# Optional browser validation only; app/runtime uses Python standard library.
+playwright==1.62.0

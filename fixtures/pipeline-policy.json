@@ -1,0 +1,11 @@
+{
+  "selection_profile": "fixture_threshold_v1",
+  "min_sold_count": 151,
+  "pricing_profile": "mock_fee_v1",
+  "surface": "desktop",
+  "cost_currency": "CNY",
+  "settlement_currency": "RUB",
+  "fx_rate": "12",
+  "sale_factor_bps": 9000,
+  "strike_factor_bps": 16000
+}

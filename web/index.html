@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>东山 · 本地任务工作台</title><link rel="stylesheet" href="/styles.css"><script defer src="/client.js"></script><script defer src="/app.js"></script></head>
+<body>
+<header><div><span class="eyebrow">DONG SHAN FU / INDEPENDENT CORE</span><h1>商品任务工作台</h1><p>导入、筛选、定价与保存，每一步都有记录。</p></div><div class="badge">TEST FIXTURE · 离线合成数据</div></header>
+<main>
+<div class="connection-bar"><span id="connection-status" role="status" data-state="starting">正在连接本地核心…</span><button id="restart-service" class="secondary" hidden>重启本地服务</button></div>
+<div class="notice"><strong>当前里程碑：本地运行</strong><span>OZON / WB 为虚构商品标签。真实店铺连接与发布不可用；已发布数量始终为 0。</span></div>
+<section class="metrics" aria-label="持久化统计"><article><span>持久化任务</span><b id="task-count">—</b></article><article><span>已提交商品</span><b id="saved-count">—</b></article><article><span>筛除商品</span><b id="filtered-count">—</b></article><article><span>已发布</span><b>0</b></article></section>
+<div class="columns">
+<section class="panel import"><div class="section-title"><h2>01 / 准备数据</h2><span>合成 fixture</span></div><p class="muted">内置样例：3 条商品 → 去重 2 条 → 销量阈值留下 p1。费用 CNY 100 为 mock 结果。</p><button id="load-demo" class="secondary">载入内置 fixture</button><label for="fixture-file">或打开自己的 fixture JSON</label><input id="fixture-file" type="file" accept=".json,application/json"><label for="fixture-json">商品输入</label><textarea id="fixture-json" rows="11" spellcheck="false" aria-label="合成商品 JSON"></textarea><button id="import-fixture">导入并写盘</button><p id="import-result" class="muted" role="status">尚未导入</p>
+<div class="section-title"><h2>02 / 定义规则</h2><span>明确币种与基数</span></div><label for="policy-json">规则 JSON（可编辑）</label><textarea id="policy-json" rows="10" spellcheck="false"></textarea><label for="idempotency-key">提交幂等键</label><input id="idempotency-key" value="fixture-first-run" maxlength="80"><p class="hint">同键同参数返回同一任务；更改规则后请用新键。</p><label class="checkbox"><input id="auto-retry" type="checkbox">fixture 自动重试：最多 2 次，退避 500ms</label><button id="submit-task">提交本地任务</button><div class="section-title"><h2>05 / 每日计划</h2><span>错过记录后跳过</span></div><label for="schedule-zone">时区</label><input id="schedule-zone" value="Asia/Shanghai"><label for="schedule-time">本地时间</label><input id="schedule-time" type="time" value="09:00"><button id="create-schedule" class="secondary">为当前 fixture 创建每日计划</button><p class="hint">只运行本地合成任务。关机期间不补跑；计划可随时取消。</p></section>
+<div class="workspace"><section class="panel"><div class="section-title"><h2>03 / 任务队列</h2><span id="engine-status">连接中</span></div><div id="task-list" class="task-list"><p class="muted">暂无任务</p></div><h3>每日计划与错过记录</h3><div id="schedule-list" class="task-list"><p class="muted">暂无计划</p></div></section>
+<section class="panel detail"><div class="section-title"><h2>04 / 结果与日志</h2><span id="selected-state">选择任务</span></div><div id="task-controls" class="controls"></div><div id="task-progress"></div><div class="table-scroll"><table><thead><tr><th>商品 / SKU</th><th>结论</th><th>售价</th><th>划线价</th><th>规则依据</th></tr></thead><tbody id="results"></tbody></table></div><h3>事务事件</h3><ol id="events" class="events"></ol></section></div>
+</div>
+<p id="feedback" role="status" aria-live="polite"></p>
+<footer>SQLite 实际持久化 · 重启读取同一数据库 · 桌面壳已接线 · 原生验收未完成 · MV3 源待宿主验证 · 本地 UI/API 已实现 · 原 ERP 模块未取得</footer>
+</main></body></html>

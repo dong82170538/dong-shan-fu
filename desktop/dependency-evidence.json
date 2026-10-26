@@ -1,0 +1,36 @@
+{
+  "source": "https://registry.npmjs.org/electron/44.9.3",
+  "version": "44.9.3",
+  "dist": {
+    "shasum": "dd36517429bc000bbb98116e21422cb947d33b85",
+    "tarball": "https://registry.npmjs.org/electron/-/electron-44.9.3.tgz",
+    "fileCount": 9,
+    "integrity": "sha512-Cv9/yMnZxNWsMlIe8T4v//NKHdUvbeyoTJoXE3BIcRxus2meeFaO9h/P3zB5d4cBXum51IgAYrT2QjpIDWKpJA==",
+    "signatures": [
+      {
+        "sig": "MEUCIGSRE+LBvcG1Wpda3I2RjUMOCOzi/C3ghNxtU/8VtNJ6AiEAuVFJI+dK0pc+N9ar+ZkZ8/PJX1m2hm7GQCqLocXvQpM=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "sig": "MEQCIBcAvMJ0/+auP0KU80h0nrlbpOuy4L5k12OFPlCZJheOAiBeYBbA4lnqzrJsnBK0bJKd5kJkaYfJLBmFrbkNXiHWqw==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "unpackedSize": 1184676
+  },
+  "bin": {
+    "electron": "cli.js",
+    "install-electron": "install.js"
+  },
+  "engines": {
+    "node": ">= 22.12.0"
+  },
+  "dependencies": {
+    "@types/node": "^24.9.0",
+    "@electron/get": "^5.0.0",
+    "@electron-internal/extract-zip": "^1.0.1"
+  },
+  "release": "https://releases.electronjs.org/release/v44.9.3",
+  "binary_metadata_status": "GitHub release API access403; no binary download attempted; exact asset size/SHA256 not verified",
+  "installation_performed": false
+}

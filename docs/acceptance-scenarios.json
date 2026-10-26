@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "source": "Parent-provided independent synthetic specification, converted to this repository's contract",
+  "initial_status": "NOT_RUN",
+  "notes": [
+    "This is a scope index, not a copy of original source or a claim of full product parity.",
+    "The transferred ZIPs could not be materialized. The TS-07 section in the task message was truncated.",
+    "PASS is assigned by scripts/run_tests.py only after its linked test executes successfully.",
+    "Observed-formula arithmetic tests run independent pure functions against supplied expected values, never original code."
+  ],
+  "scenarios": [
+    {
+      "id": "TS-01",
+      "requirement": "REQ-01",
+      "fixture": "F-PIPELINE",
+      "status": "NOT_RUN",
+      "test": "test_TS01_pipeline_second_process",
+      "profile": "candidate_policy",
+      "scope": "3 inputs dedupe to 2; p1 retained, mock CNY100 -> RUB1080/1920, atomic save, second process export, published0"
+    },
+    {
+      "id": "TS-02",
+      "requirement": "REQ-02",
+      "fixture": "F-RESTART",
+      "status": "NOT_RUN",
+      "test": "test_TS02_real_kill_restart_manual_resume",
+      "profile": "candidate_policy",
+      "scope": "Real forced process kill, second PID reads same SQLite, committed result retained, interrupted requires explicit resume"
+    },
+    {
+      "id": "TS-03",
+      "requirement": "REQ-03",
+      "fixture": "F-CANCEL",
+      "status": "NOT_RUN",
+      "test": "test_TS03_cancel_late_result_cannot_commit",
+      "profile": "candidate_policy",
+      "scope": "Deferred callback after cancellation cannot write products or success; stale_result_ignored event"
+    },
+    {
+      "id": "TS-04",
+      "requirement": "REQ-04",
+      "fixture": "F-DEDUP",
+      "status": "NOT_RUN",
+      "test": "test_TS04_concurrent_idempotency_restart_and_conflict",
+      "profile": "candidate_policy",
+      "scope": "16 concurrent local submits, second process replay and conflict, one durable task"
+    },
+    {
+      "id": "TS-05",
+      "requirement": "REQ-05",
+      "fixture": "F-TIMEOUT",
+      "status": "NOT_RUN",
+      "profile": "observed_parity",
+      "test": "test_TS05_request_deadline_separate_from_item_deadline",
+      "scope": "Independent request wrapper over an injected async transport; real clock transitions tested with a virtual clock: 10s request deadline, separate120s item deadline, no automatic retry, late response ignored. Not original merchant HTTP integration."
+    },
+    {
+      "id": "TS-06",
+      "requirement": "REQ-06",
+      "fixture": "F-TIMEOUT,F-CANCEL",
+      "status": "NOT_RUN",
+      "profile": "candidate_policy",
+      "test": "test_TS06_bounded_auto_retry_and_cancel_during_backoff",
+      "scope": "Explicit automatic_fixture mode, max2 physical attempts,500ms virtual backoff, cancel during backoff prevents retry; budget also enforced across restart/pause."
+    },
+    {
+      "id": "TS-07",
+      "requirement": "REQ-07",
+      "fixture": "F-BATCH",
+      "status": "NOT_RUN",
+      "profile": "observed_parity",
+      "test": "test_TS07_observed_batch_return_defect_is_isolated_from_service",
+      "scope": "observed_legacy reference from parent static evidence interface.services.js239-251 only. A real SQLite mock commits first1000 then failure returns0; independent all-success commits1001 but reference returns last1. Production uses correct cumulative counts, main pushData usually single-item.",
+      "evidence_source": "parent static evidence"
+    },
+    {
+      "id": "TS-08",
+      "requirement": "REQ-08",
+      "fixture": "F-BATCH",
+      "status": "NOT_RUN",
+      "test": "test_TS08_1001_partial_save_failure_restart_retry_only_failed",
+      "profile": "candidate_policy",
+      "scope": "Equivalent durable per-product transactions, not original batch API parity: 1000 commits, item1001 rollback, second process retries only failed item"
+    },
+    {
+      "id": "TS-09",
+      "requirement": "REQ-09",
+      "fixture": "F-COUNT",
+      "status": "NOT_RUN",
+      "test": "test_TS09_counts_filtered_failed_committed_separate",
+      "profile": "candidate_policy",
+      "scope": "3 processed = 1 committed + 1 filtered + 1 failed; published0"
+    },
+    {
+      "id": "TS-10",
+      "requirement": "REQ-10",
+      "fixture": "F-FX",
+      "status": "NOT_RUN",
+      "test": "test_TS10_desktop_extension_separate_bases",
+      "profile": "observed_parity",
+      "scope": "Independent mock_fee pure functions only: desktop1080/1920, extension1080/1728; original implementation not executed"
+    },
+    {
+      "id": "TS-11",
+      "requirement": "REQ-11",
+      "fixture": "F-FX",
+      "status": "NOT_RUN",
+      "profile": "observed_parity",
+      "test": "test_TS11_legacy_currency_mapping_only_in_reference_profile",
+      "scope": "observed_legacy only from parent static evidence utils/index.js34-78: YN1200, EUR800 after inverse4dp, extension unknown-1. Normal ISO product rules are explicitly unchanged; no financial correctness or original runtime claim.",
+      "evidence_source": "parent static evidence"
+    },
+    {
+      "id": "TS-12",
+      "requirement": "REQ-12",
+      "fixture": "F-MONEY",
+      "status": "NOT_RUN",
+      "profile": "candidate_policy",
+      "test": "test_TS12_context_money_persisted_and_untagged_rejected",
+      "scope": "Two context+currency tagged records persist and are read in a second process; missing currency rejected and recorded, no cross-currency total."
+    },
+    {
+      "id": "TS-13",
+      "requirement": "REQ-13",
+      "fixture": "F-AUTH,F-ERP",
+      "status": "NOT_RUN",
+      "profile": "candidate_policy",
+      "test": "test_TS13_unauthenticated_restricted_routes_block_writes",
+      "scope": "Actual HTTP restricted pages/commands return AUTH_REQUIRED while unauthenticated; fake fixture login explicitly grants no real merchant capability."
+    },
+    {
+      "id": "TS-14",
+      "requirement": "REQ-14",
+      "fixture": "F-AUTH",
+      "status": "NOT_RUN",
+      "profile": "observed_parity",
+      "test": "test_TS14_legacy_local_gate_compared_with_safe_session_epoch",
+      "scope": "observed_legacy local flag sequence only from parent static evidence request.js15-50; one unawaited stop, late0 clears old local flags. Compared against real new persistent epoch guard, which stays expired. No server authentication bypass claim.",
+      "evidence_source": "parent static evidence"
+    },
+    {
+      "id": "TS-15",
+      "requirement": "REQ-15",
+      "fixture": "F-AUTH,F-CANCEL",
+      "status": "NOT_RUN",
+      "profile": "candidate_policy",
+      "test": "test_TS15_session_epoch_expires_and_cancels_only_its_account",
+      "scope": "Persistent fixture session epoch, stale code0 ignored, same-account selection/inspection_fixture/timers canceled, logout local only/unconfirmed remote, new work blocked until explicit new fixture auth."
+    },
+    {
+      "id": "TS-16",
+      "requirement": "REQ-16",
+      "fixture": "F-IPC",
+      "status": "NOT_RUN",
+      "profile": "candidate_policy",
+      "blocker": {
+        "target": "Native desktop IPC sender/window/listener integration",
+        "reason": "Electron package and graphical display runtime are absent; Windows runtime/packaging is unavailable. HTTP/core tests cannot establish native IPC isolation.",
+        "prerequisite": "A permitted Electron test runtime with a display/headless harness and, separately, a Windows packaging/test environment.",
+        "already_completed": "Core/API sender capability restrictions and durable cancellation; no claim of desktop IPC implementation.",
+        "action_status": "not_executed",
+        "approval_denied": false
+      }
+    },
+    {
+      "id": "TS-17",
+      "requirement": "REQ-17",
+      "fixture": "F-CRON",
+      "status": "NOT_RUN",
+      "profile": "candidate_policy",
+      "test": "test_TS17_daily_missed_occurrences_durable_across_two_restarts",
+      "scope": "Actual ZoneInfo daily09:00 Asia/Shanghai schedule and unique occurrence ledger; two subprocess restarts record exactly2 missed occurrences, next2026-10-26T01:00Z, no catchup."
+    },
+    {
+      "id": "TS-18",
+      "requirement": "REQ-18",
+      "fixture": "F-ERP",
+      "status": "NOT_RUN",
+      "profile": "candidate_policy",
+      "test": "test_TS18_inventory_and_own_implemented_capabilities_are_separate",
+      "scope": "Revised by parent: read68 inert static route records from parent evidence, retain duplicate root/redirect records; separately report actual independent handlers/capabilities; source-written MV3 host unverified; missing CreateGoods501. Inventory is never evaled or implementation proof.",
+      "evidence_source": "parent static evidence"
+    },
+    {
+      "id": "TS-19",
+      "requirement": "REQ-19",
+      "fixture": "F-EXTENSION",
+      "status": "NOT_RUN",
+      "profile": "observed_parity",
+      "test": "test_TS19_extension_preview_validation_and_no_publish",
+      "scope": "Real standalone SKU preview API/core, separate duplicate offer and49.99 minimum tests, valid50.00 dry run. Actual MV3 host integration is reported separately, never inferred from this test."
+    },
+    {
+      "id": "TS-20",
+      "requirement": "REQ-20",
+      "fixture": "F-PIPELINE",
+      "status": "NOT_RUN",
+      "profile": "observed_parity",
+      "test": "test_TS20_inclusive_range_and_explicit_missing_profiles",
+      "scope": "151/150 threshold, inclusive bounds, null->0 and NaN behavior only in explicit legacy_static_v1 numeric profile. Strict money import remains separately validated."
+    }
+  ],
+  "specification_revisions": [
+    {
+      "source": "parent static evidence",
+      "date": "2026-10-25",
+      "detail": "TS07/11/14 static contracts supplied after file transfer failure; isolated tests only. TS18 revised to separate upstream inventory from independently implemented routes, avoiding obsolete planned/zero constraints."
+    }
+  ]
+}

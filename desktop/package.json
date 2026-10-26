@@ -1,0 +1,19 @@
+{
+  "name": "dong-shan-fu-desktop",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Independent sandboxed desktop shell for the existing local fixture core",
+  "main": "main.cjs",
+  "engines": {
+    "node": ">=24.19.0"
+  },
+  "scripts": {
+    "start": "node scripts/run-electron.cjs app",
+    "test": "node scripts/test.cjs",
+    "test:native": "node scripts/run-electron.cjs native-test",
+    "requirements": "node scripts/check-runtime.cjs"
+  },
+  "devDependencies": {
+    "electron": "44.9.3"
+  }
+}

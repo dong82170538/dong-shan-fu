@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Dong Shan Fu · Fixture Preview",
+  "version": "0.1.0",
+  "description": "Independent offline synthetic SKU preview. No merchant collection, login or publishing.",
+  "permissions": ["storage"],
+  "host_permissions": ["http://127.0.0.1/*"],
+  "background": {"service_worker": "background.js"},
+  "action": {"default_title": "Synthetic fixture preview", "default_popup": "popup.html"},
+  "content_security_policy": {"extension_pages": "script-src 'self'; object-src 'none'; connect-src http://127.0.0.1:*"}
+}
